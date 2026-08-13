@@ -1,0 +1,36 @@
+name: Feature request / 機能提案
+description: Suggest an improvement within the glossary matching scope / 用語照合の範囲内で改善を提案する
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or workflow / 課題または作業の流れ
+      description: What are you trying to accomplish before translation or prompting?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution / 提案する解決方法
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives / 代替案
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist / 確認
+      options:
+        - label: I searched existing issues. / 既存Issueを検索しました。
+          required: true
+        - label: I understand that translation, morphological analysis, and AI inference are outside the initial scope. / 翻訳、形態素解析、AI推論が初期スコープ外であることを理解しています。
+          required: true
+        - label: I agree to follow the Code of Conduct. / 行動規範に同意します。
+          required: true
