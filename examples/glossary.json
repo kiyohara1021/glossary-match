@@ -1,0 +1,37 @@
+{
+  "entries": [
+    {
+      "id": "black-dragon",
+      "aliases": ["黒龍", "Black Dragon"],
+      "translations": {
+        "en": "Black Dragon",
+        "ja": "黒龍"
+      }
+    },
+    {
+      "id": "black-dragon-hunt",
+      "aliases": ["黒龍討伐戦", "Black Dragon Hunt"],
+      "translations": {
+        "en": "Black Dragon Hunt",
+        "ja": "黒龍討伐戦"
+      },
+      "context": "A limited-time game event, not a generic dragon hunt."
+    },
+    {
+      "id": "fuel",
+      "aliases": ["Fuel", "燃料"],
+      "translations": {
+        "en": "Fuel",
+        "ja": "燃料"
+      }
+    },
+    {
+      "id": "fuel-refinery",
+      "aliases": ["Fuel Refinery", "燃料精製所"],
+      "translations": {
+        "en": "Fuel Refinery",
+        "ja": "燃料精製所"
+      }
+    }
+  ]
+}

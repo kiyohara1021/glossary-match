@@ -1,0 +1,53 @@
+name: Bug report / 不具合報告
+description: Report a reproducible matching or CLI problem / 再現できる照合・CLIの不具合を報告する
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting a problem. Use a minimal synthetic glossary and do not include confidential text, credentials, or personal information.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened? / 何が起きましたか？
+      description: Describe the actual and expected behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction / 最小限の再現例
+      description: Include the input text, synthetic glossary, options, and command or TypeScript code.
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: glossary-match version / バージョン
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: node
+    attributes:
+      label: Node.js version / Node.jsバージョン
+      placeholder: 20.19.0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist / 確認
+      options:
+        - label: I searched existing issues. / 既存Issueを検索しました。
+          required: true
+        - label: This report contains no confidential or personal data. / 機密情報や個人情報を含みません。
+          required: true
+        - label: I agree to follow the Code of Conduct. / 行動規範に同意します。
+          required: true

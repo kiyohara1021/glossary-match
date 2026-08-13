@@ -1,0 +1,59 @@
+{
+  "name": "glossary-match",
+  "version": "0.1.0",
+  "description": "Deterministic, CJK-friendly glossary matching for translation and LLM prompts.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Yuta Kiyohara",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiyohara1021/glossary-match.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kiyohara1021/glossary-match/issues"
+  },
+  "homepage": "https://github.com/kiyohara1021/glossary-match#readme",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "glossary-match": "dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.ja.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test",
+    "check": "npm run typecheck && npm test",
+    "prepack": "npm run check"
+  },
+  "keywords": [
+    "glossary",
+    "i18n",
+    "localization",
+    "translation",
+    "cjk",
+    "llm"
+  ],
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  }
+}
