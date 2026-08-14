@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CJK-friendly glossary matching in your browser. No API key, no upload." />
+    <meta name="theme-color" content="#f4f1e8" />
+    <title>glossary-match playground</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./assets/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="glossary-match playground">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><b></b></span>
+        <span>glossary-match</span>
+      </a>
+      <nav aria-label="External links">
+        <a href="https://www.npmjs.com/package/glossary-match">npm</a>
+        <a href="https://github.com/kiyohara1021/glossary-match">GitHub ↗</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <div class="eyebrow"><span></span> Browser playground</div>
+          <h1 id="page-title">用語の重なりを、<br /><em>説明できる一致</em>へ。</h1>
+          <p>
+            CJKに強い決定論的な用語照合を、その場で試せます。長い用語を優先し、
+            除外と競合の理由まで確認できます。
+          </p>
+        </div>
+        <aside class="privacy-note">
+          <strong><span aria-hidden="true">●</span> Local only</strong>
+          <p>入力内容はブラウザ内だけで処理されます。APIキーもアップロードも不要です。</p>
+        </aside>
+      </section>
+
+      <section class="playground" aria-label="Glossary matching playground">
+        <div class="panel input-panel">
+          <div class="panel-heading">
+            <div><span class="step">01</span><h2>Input</h2></div>
+            <button id="load-sample" class="text-button" type="button">サンプルを復元</button>
+          </div>
+
+          <label for="source-text">照合するテキスト</label>
+          <textarea id="source-text" rows="4" spellcheck="false"></textarea>
+
+          <div class="label-row">
+            <label for="glossary-json">用語集 JSON</label>
+            <span id="json-status" class="status-pill">Valid JSON</span>
+          </div>
+          <textarea id="glossary-json" class="code-input" rows="18" spellcheck="false"></textarea>
+
+          <details class="options">
+            <summary>Matching options</summary>
+            <div class="option-grid">
+              <label>Target locale<input id="locale" type="text" value="en" maxlength="20" /></label>
+              <label>
+                Normalization
+                <select id="normalization">
+                  <option value="NFKC">NFKC</option><option value="NFC">NFC</option>
+                  <option value="NFD">NFD</option><option value="NFKD">NFKD</option>
+                  <option value="false">None</option>
+                </select>
+              </label>
+              <label>
+                Boundary mode
+                <select id="boundary-mode"><option value="auto">Auto</option><option value="substring">Substring</option></select>
+              </label>
+              <label class="check-label"><input id="case-sensitive" type="checkbox" />Case sensitive</label>
+              <label class="check-label"><input id="include-translations" type="checkbox" checked />Match translations</label>
+            </div>
+          </details>
+
+          <button id="run-match" class="primary-button" type="button">
+            <span>用語を照合</span><span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div class="panel result-panel" aria-live="polite">
+          <div class="panel-heading">
+            <div><span class="step">02</span><h2>Result</h2></div>
+            <span id="result-state" class="run-state">Ready</span>
+          </div>
+          <div id="error-box" class="error-box" hidden></div>
+          <div id="result-content">
+            <div class="stats" aria-label="Result summary">
+              <div><strong id="match-count">0</strong><span>Matches</span></div>
+              <div><strong id="suppressed-count">0</strong><span>Suppressed</span></div>
+              <div><strong id="conflict-count">0</strong><span>Conflicts</span></div>
+            </div>
+            <section class="result-section">
+              <h3>Matched text</h3><div id="highlighted-text" class="highlighted-text"></div>
+            </section>
+            <section class="result-section">
+              <h3>Active terms</h3><div id="match-list" class="result-list"></div>
+            </section>
+            <section id="suppressed-section" class="result-section" hidden>
+              <h3>Suppressed <span>longest occurrence wins</span></h3>
+              <div id="suppressed-list" class="result-list compact"></div>
+            </section>
+            <section id="conflict-section" class="result-section warning-section" hidden>
+              <h3>Conflicts <span>review required</span></h3>
+              <div id="conflict-list" class="result-list compact"></div>
+            </section>
+            <section id="lint-section" class="result-section" hidden>
+              <h3>Glossary lint</h3><div id="lint-list" class="result-list compact"></div>
+            </section>
+            <section class="result-section prompt-section">
+              <div class="section-heading"><h3>LLM-ready prompt</h3><button id="copy-prompt" class="copy-button" type="button">Copy</button></div>
+              <pre id="prompt-output"><code></code></pre>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="explainer">
+        <p>What happens here</p>
+        <ol>
+          <li><span>01</span><strong>Normalize</strong><small>Unicode NFKC by default</small></li>
+          <li><span>02</span><strong>Find</strong><small>CJK substrings, Latin boundaries</small></li>
+          <li><span>03</span><strong>Explain</strong><small>Matches, suppressions, conflicts</small></li>
+        </ol>
+      </section>
+    </main>
+
+    <footer>
+      <p>Zero runtime dependencies. No network requests.</p>
+      <p><a href="https://github.com/kiyohara1021/glossary-match/blob/main/LICENSE">MIT License</a></p>
+    </footer>
+  </body>
+</html>

@@ -39,6 +39,9 @@ jobs:
       - name: Run type checks and tests
         run: npm run check
 
+      - name: Build playground
+        run: npm run build:playground
+
   package:
     name: Package contents
     runs-on: ubuntu-latest

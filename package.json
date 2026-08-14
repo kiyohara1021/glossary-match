@@ -39,7 +39,8 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc --noEmit",
+    "build:playground": "esbuild playground/app.ts --bundle --format=iife --platform=browser --target=es2022 --outfile=playground/assets/app.js",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.playground.json",
     "test": "npm run build && node --test",
     "check": "npm run typecheck && npm test",
     "prepack": "npm run check"
@@ -54,6 +55,7 @@
   ],
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "esbuild": "^0.25.12",
     "typescript": "^5.9.0"
   }
 }
