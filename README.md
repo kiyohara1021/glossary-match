@@ -6,6 +6,8 @@
 
 [日本語](README.ja.md)
 
+**[Try the browser playground →](https://kiyohara1021.github.io/glossary-match/)** — no install, API key, or upload required.
+
 Deterministic, CJK-friendly glossary matching for translation pipelines and LLM prompts.
 
 `glossary-match` finds terms before text reaches an AI model. It does not tokenize Japanese, guess semantic equivalents, or call an API. CJK terms use substring matching, Latin terms use word boundaries, and a shorter occurrence is suppressed when it is fully covered by a longer matched term.
@@ -32,6 +34,7 @@ This avoids contradictory prompt instructions while keeping the result fast, exp
 - Glossary linting for duplicate IDs, duplicate aliases, and nested aliases
 - Zero runtime dependencies
 - TypeScript API and CLI
+- Interactive, local-only browser playground
 
 ## Install
 
