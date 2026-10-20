@@ -32,6 +32,14 @@ npm pack --dry-run
 4. Update both READMEs for user-facing changes.
 5. Explain what changed, why it changed, and how it was verified.
 
+### Releasing
+
+Maintainers publish to npm through GitHub Actions using npm trusted publishing.
+
+1. Merge a pull request that updates `version` in `package.json`.
+2. Create a GitHub Release whose tag is `v` followed by that version, such as `v0.2.0`.
+3. Publishing the release runs `.github/workflows/publish.yml`, which checks the tag against `package.json` and runs `npm publish` with provenance.
+
 By contributing, you agree that your contribution is licensed under the project's MIT License.
 
 ## 日本語
@@ -63,5 +71,13 @@ npm pack --dry-run
 3. 可能な限り公開APIとCLIの後方互換性を保ちます。
 4. 利用者向けの変更では英語・日本語のREADMEを更新します。
 5. 変更内容、理由、確認方法を説明します。
+
+### リリース
+
+メンテナーはnpmのTrusted Publishingを使い、GitHub Actionsからnpmに公開します。
+
+1. `package.json`の`version`を更新するPull Requestをマージします。
+2. そのバージョンの先頭に`v`を付けたタグ（例：`v0.2.0`）でGitHub Releaseを作成します。
+3. Releaseを公開すると`.github/workflows/publish.yml`が実行され、タグと`package.json`のバージョンを照合したうえで、provenance付きで`npm publish`します。
 
 コントリビューションは、このプロジェクトのMITライセンスで提供されることに同意したものとします。
