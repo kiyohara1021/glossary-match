@@ -42,7 +42,7 @@ AIや翻訳APIには接続しません。用語の採用・除外理由を構造
 npm install glossary-match
 ```
 
-Node.js 20以上が必要です。実行時依存パッケージはありません。
+Node.js 22以上が必要です。実行時依存パッケージはありません。
 
 ## 30秒Quick Start
 
@@ -153,7 +153,7 @@ npm run check
 npm pack --dry-run
 ```
 
-Node.js 20以上をサポートします。CIではNode.js 20・22・24を使い、`npm ci`と`npm run check`を実行します。
+Node.js 22以上をサポートします。CIではNode.js 22・24を使い、`npm ci`と`npm run check`を実行します。
 
 変更を提案する前に[CONTRIBUTING.md](CONTRIBUTING.md)をご確認ください。脆弱性の疑いは[SECURITY.md](SECURITY.md)に従って非公開で報告してください。
 
