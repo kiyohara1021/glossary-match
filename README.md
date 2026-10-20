@@ -173,7 +173,7 @@ npm run check
 npm pack --dry-run
 ```
 
-Node.js 20 or newer is supported. CI runs `npm ci` and `npm run check` on Node.js 20, 22, and 24.
+Node.js 22 or newer is supported. CI runs `npm ci` and `npm run check` on Node.js 22 and 24.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) before proposing a change. Report suspected vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
 

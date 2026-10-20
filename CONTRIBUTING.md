@@ -15,7 +15,7 @@ Bug fixes, matching edge cases, tests, documentation improvements, and focused p
 
 ### Development setup
 
-Node.js 20 or newer is required. The `.nvmrc` selects Node.js 24 for local development.
+Node.js 22 or newer is required. The `.nvmrc` selects Node.js 24 for local development.
 
 ```bash
 nvm use
@@ -47,7 +47,7 @@ By contributing, you agree that your contribution is licensed under the project'
 
 ### 開発環境
 
-Node.js 20以上が必要です。`.nvmrc`ではローカル開発用にNode.js 24を選択します。
+Node.js 22以上が必要です。`.nvmrc`ではローカル開発用にNode.js 24を選択します。
 
 ```bash
 nvm use
