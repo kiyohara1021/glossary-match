@@ -43,6 +43,12 @@ export interface MatchedEntry {
 }
 
 export interface MatchConflict {
+  /**
+   * `same-span`: different entries match exactly the same text.
+   * `overlap`: occurrences from different entries partly overlap, e.g. "AB" and "BC" in "ABC".
+   */
+  kind: "same-span" | "overlap";
+  /** For `overlap`, the span covering every occurrence in the conflict. */
   start: number;
   end: number;
   occurrences: TermOccurrence[];

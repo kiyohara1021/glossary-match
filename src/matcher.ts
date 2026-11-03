@@ -90,19 +90,34 @@ function groupMatches(entries: GlossaryEntry[], occurrences: TermOccurrence[]): 
   });
 }
 
+/**
+ * Groups active occurrences whose spans overlap and reports groups that involve more than
+ * one entry. Like same-span conflicts, partial overlaps are reported, not resolved: the
+ * glossary cannot tell which reading of the text is meant.
+ */
 function findConflicts(occurrences: TermOccurrence[]): MatchConflict[] {
-  const bySpan = new Map<string, TermOccurrence[]>();
-  for (const occurrence of occurrences) {
-    const key = `${occurrence.start}:${occurrence.end}`;
-    const current = bySpan.get(key) ?? [];
-    current.push(occurrence);
-    bySpan.set(key, current);
+  const sorted = [...occurrences].sort((a, b) => a.start - b.start || a.end - b.end);
+  const groups: TermOccurrence[][] = [];
+  let groupEnd = -1;
+  for (const occurrence of sorted) {
+    const current = groups[groups.length - 1];
+    if (current && occurrence.start < groupEnd) {
+      current.push(occurrence);
+      groupEnd = Math.max(groupEnd, occurrence.end);
+    } else {
+      groups.push([occurrence]);
+      groupEnd = occurrence.end;
+    }
   }
 
-  return [...bySpan.values()].flatMap((items) => {
+  return groups.flatMap((items) => {
     if (new Set(items.map((item) => item.entryId)).size < 2) return [];
-    const first = items[0];
-    return first ? [{ start: first.start, end: first.end, occurrences: items }] : [];
+    const start = Math.min(...items.map((item) => item.start));
+    const end = Math.max(...items.map((item) => item.end));
+    const sameSpan = items.every((item) => item.start === start && item.end === end);
+    // Keep the input order of entries inside a conflict, as before.
+    const ordered = occurrences.filter((occurrence) => items.includes(occurrence));
+    return [{ kind: sameSpan ? "same-span" : "overlap", start, end, occurrences: ordered }];
   });
 }
 

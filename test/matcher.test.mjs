@@ -131,8 +131,56 @@ test("reports active same-span conflicts without choosing an entry", () => {
   });
 
   assert.equal(result.conflicts.length, 1);
+  assert.equal(result.conflicts[0].kind, "same-span");
   assert.deepEqual(result.conflicts[0].occurrences.map(({ entryId }) => entryId), ["a", "b"]);
   assert.deepEqual(result.matches.map(({ entry }) => entry.id), ["a", "b"]);
+});
+
+test("reports partly overlapping occurrences from different entries as an overlap conflict", () => {
+  const result = matchGlossary("ABC", {
+    entries: [
+      { id: "ab", aliases: ["AB"], translations: {} },
+      { id: "bc", aliases: ["BC"], translations: {} },
+    ],
+  }, { boundaryMode: "substring" });
+
+  assert.deepEqual(result.conflicts.map(({ kind, start, end }) => ({ kind, start, end })), [
+    { kind: "overlap", start: 0, end: 3 },
+  ]);
+  assert.deepEqual(result.conflicts[0].occurrences.map(({ entryId }) => entryId), ["ab", "bc"]);
+  // Like same-span conflicts, both stay active; the caller decides.
+  assert.deepEqual(result.matches.map(({ entry }) => entry.id), ["ab", "bc"]);
+  assert.deepEqual(result.suppressed, []);
+});
+
+test("reports a Japanese partial overlap but not a term fully inside a longer one", () => {
+  const entries = [
+    { id: "dragon-hunt", aliases: ["黒龍討伐"], translations: {} },
+    { id: "battle", aliases: ["討伐戦"], translations: {} },
+  ];
+  const overlap = matchGlossary("黒龍討伐戦に参加", entries);
+  assert.equal(overlap.conflicts.length, 1);
+  assert.equal(overlap.conflicts[0].kind, "overlap");
+  assert.equal(overlap.normalizedText.slice(overlap.conflicts[0].start, overlap.conflicts[0].end), "黒龍討伐戦");
+
+  // With the full event name as an alias, both shorter terms are contained and suppressed instead.
+  const contained = matchGlossary("黒龍討伐戦に参加", [...entries, { id: "event", aliases: ["黒龍討伐戦"], translations: {} }]);
+  assert.deepEqual(contained.conflicts, []);
+  assert.deepEqual(contained.matches.map(({ entry }) => entry.id), ["event"]);
+});
+
+test("does not treat adjacent or same-entry overlaps as conflicts", () => {
+  const adjacent = matchGlossary("ABCD", {
+    entries: [
+      { id: "ab", aliases: ["AB"], translations: {} },
+      { id: "cd", aliases: ["CD"], translations: {} },
+    ],
+  }, { boundaryMode: "substring" });
+  assert.deepEqual(adjacent.conflicts, []);
+
+  const sameEntry = matchGlossary("ああああ", [{ id: "a", aliases: ["あああ"], translations: {} }]);
+  assert.equal(sameEntry.matches[0].occurrences.length, 2);
+  assert.deepEqual(sameEntry.conflicts, []);
 });
 
 test("formats only active terms with a translation for the requested locale", () => {
