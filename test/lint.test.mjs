@@ -46,3 +46,35 @@ test("reports empty IDs, duplicate IDs, missing aliases, and blank aliases as er
     "empty-alias",
   ]));
 });
+
+test("checks translation labels too, because matching treats them as aliases", () => {
+  const glossary = {
+    entries: [
+      { id: "dragon", aliases: ["黒龍"], translations: { en: "Dragon" } },
+      { id: "wyrm", aliases: ["ワーム"], translations: { en: "Dragon" } },
+      { id: "hunt", aliases: ["Dragon Hunt"], translations: {} },
+    ],
+  };
+  const issues = lintGlossary(glossary);
+
+  const duplicate = issues.find(({ code }) => code === "duplicate-alias");
+  assert.deepEqual(duplicate?.entryIds, ["dragon", "wyrm"]);
+  assert.match(duplicate?.message ?? "", /Translation "Dragon" \(en\)/);
+
+  const nested = issues.filter(({ code }) => code === "nested-alias");
+  assert.deepEqual(nested.map(({ entryIds }) => entryIds), [["dragon", "hunt"], ["wyrm", "hunt"]]);
+  assert.match(nested[0]?.message ?? "", /^Translation "Dragon" \(en\) is contained in "Dragon Hunt"/);
+
+  assert.deepEqual(lintGlossary(glossary, { includeTranslations: false }), []);
+});
+
+test("does not report a translation that repeats the entry's own alias", () => {
+  const issues = lintGlossary({
+    entries: [
+      { id: "fuel", aliases: ["Fuel"], translations: { en: "Fuel", ja: "" } },
+      { id: "refinery", aliases: ["精製所"], translations: { en: "Refinery" } },
+    ],
+  });
+
+  assert.deepEqual(issues, []);
+});

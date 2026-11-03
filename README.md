@@ -148,6 +148,8 @@ glossary-match lint --glossary examples/glossary.json
 
 Nested aliases are warnings, not errors. They may be intentional; the warning makes the runtime preference visible to glossary maintainers.
 
+Translation labels are checked the same way, because matching treats them as aliases by default. Pass `{ includeTranslations: false }` to `lintGlossary` when you match with that option. A translation that repeats one of the entry's own aliases is not reported.
+
 ## Why not tokenize Japanese first?
 
 Game names, product names, and other domain terms are often unknown to a general-purpose tokenizer. A tokenizer may split the exact phrase the glossary is supposed to preserve. This package therefore treats explicit aliases as authoritative and resolves overlapping occurrences deterministically.
