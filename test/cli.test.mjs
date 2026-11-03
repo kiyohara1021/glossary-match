@@ -99,3 +99,28 @@ test("CLI match, JSON output, and lint exit codes work end to end", async (t) =>
   assert.equal(unknownArgument.exitCode, 2);
   assert.match(unknownArgument.stderr, /Unknown argument: --unknown/);
 });
+
+test("treats option values by position, so -h can be text", async () => {
+  const glossaryPath = fileURLToPath(new URL("../examples/glossary.json", import.meta.url));
+  const asText = await runCli(["match", "--glossary", glossaryPath, "--text", "-h"]);
+  assert.equal(asText.exitCode, 0);
+  assert.equal(asText.stdout, "No glossary terms matched.\n");
+
+  const help = await runCli(["match", "--glossary", glossaryPath, "--text", "黒龍", "-h"]);
+  assert.equal(help.exitCode, 0);
+  assert.match(help.stdout, /^glossary-match\n\nUsage:/);
+});
+
+test("accepts --flag=value, including text that starts with --", async () => {
+  const glossaryPath = fileURLToPath(new URL("../examples/glossary.json", import.meta.url));
+  const result = await runCli(["match", `--glossary=${glossaryPath}`, "--text=--黒龍"]);
+  assert.equal(result.exitCode, 0);
+  assert.match(result.stdout, /- 黒龍 → Black Dragon/);
+
+  const separate = await runCli(["match", "--glossary", glossaryPath, "--text", "--黒龍"]);
+  assert.equal(separate.exitCode, 2);
+  assert.match(separate.stderr, /--text requires a value/);
+
+  const duplicate = await runCli(["match", "--glossary", glossaryPath, "--text=a", "--text", "b"]);
+  assert.match(duplicate.stderr, /--text may only be specified once/);
+});
