@@ -99,3 +99,19 @@ test("CLI match, JSON output, and lint exit codes work end to end", async (t) =>
   assert.equal(unknownArgument.exitCode, 2);
   assert.match(unknownArgument.stderr, /Unknown argument: --unknown/);
 });
+
+test("labels overlap conflicts in the text output", async () => {
+  const { mkdtemp, writeFile } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+  const { tmpdir } = await import("node:os");
+  const dir = await mkdtemp(join(tmpdir(), "glossary-overlap-"));
+  const path = join(dir, "glossary.json");
+  await writeFile(path, JSON.stringify({ entries: [
+    { id: "dragon-hunt", aliases: ["黒龍討伐"], translations: { en: "Black Dragon Raid" } },
+    { id: "battle", aliases: ["討伐戦"], translations: { en: "Subjugation Battle" } },
+  ] }));
+
+  const result = await runCli(["match", "--glossary", path, "--text", "黒龍討伐戦"]);
+  assert.equal(result.exitCode, 0);
+  assert.match(result.stdout, /Conflict \(overlap\): \[0, 5\) matches dragon-hunt, battle/);
+});

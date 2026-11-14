@@ -136,7 +136,7 @@ matchGlossary(text, glossary, {
 3. CJK, Arabic, and other non-Latin terms are found as literal substrings; glossary content is never interpreted as a regular expression.
 4. A Latin or numeric edge must not touch another Unicode Latin or numeric character in `auto` boundary mode.
 5. A short occurrence fully contained by a longer occurrence is suppressed. The same short term at another position remains active.
-6. Active occurrences from different entries with the same span are reported in `conflicts`; neither entry is chosen automatically.
+6. Active occurrences from different entries that share the same span (`kind: "same-span"`) or partly overlap (`kind: "overlap"`, such as `AB` and `BC` in `ABC`) are reported in `conflicts`; neither entry is chosen automatically. An overlap conflict spans every occurrence involved.
 
 All matching is literal and deterministic. `findOccurrences` expects text and terms that have already been normalized, which makes it useful when callers cache normalized glossary terms.
 

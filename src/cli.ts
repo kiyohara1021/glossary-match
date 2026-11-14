@@ -137,7 +137,7 @@ async function main(): Promise<void> {
       for (const conflict of result.conflicts) {
         const entryIds = [...new Set(conflict.occurrences.map(({ entryId }) => entryId))];
         process.stdout.write(
-          `Conflict: [${conflict.start}, ${conflict.end}) matches ${entryIds.join(", ")}\n`,
+          `Conflict${conflict.kind === "overlap" ? " (overlap)" : ""}: [${conflict.start}, ${conflict.end}) matches ${entryIds.join(", ")}\n`,
         );
       }
     }
