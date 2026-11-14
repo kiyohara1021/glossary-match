@@ -5,6 +5,19 @@ interface AliasOwner {
   entry: GlossaryEntry;
   term: string;
   normalized: string;
+  /** Set when the term is a translation label rather than an alias. */
+  locale?: string;
+}
+
+/** The longer side of a nested-alias message: just the term for an alias, as before. */
+function containerLabel(owner: AliasOwner): string {
+  return owner.locale === undefined ? `"${owner.term}"` : `translation "${owner.term}" (${owner.locale})`;
+}
+
+function describe(owner: AliasOwner): string {
+  return owner.locale === undefined
+    ? `Alias "${owner.term}"`
+    : `Translation "${owner.term}" (${owner.locale})`;
 }
 
 export function lintGlossary(
@@ -12,6 +25,8 @@ export function lintGlossary(
   options: MatchOptions = {},
 ): LintIssue[] {
   const entries = Array.isArray(glossary) ? glossary : glossary.entries;
+  // matchGlossary treats translation labels as aliases unless told otherwise, so lint does too.
+  const includeTranslations = options.includeTranslations ?? true;
   const issues: LintIssue[] = [];
   const ids = new Map<string, number>();
   const owners: AliasOwner[] = [];
@@ -32,6 +47,7 @@ export function lintGlossary(
       });
     }
 
+    const seen = new Set<string>();
     for (const term of entry.aliases) {
       const normalized = normalizeText(term, options);
       if (normalized.trim().length === 0) {
@@ -43,7 +59,17 @@ export function lintGlossary(
         });
       } else {
         owners.push({ entry, term, normalized });
+        seen.add(normalized);
       }
+    }
+
+    if (!includeTranslations) continue;
+    for (const [locale, term] of Object.entries(entry.translations)) {
+      const normalized = normalizeText(term, options);
+      // A translation that repeats one of the entry's own terms is matched once, like in matchGlossary.
+      if (normalized.trim().length === 0 || seen.has(normalized)) continue;
+      owners.push({ entry, term, normalized, locale });
+      seen.add(normalized);
     }
   }
 
@@ -71,7 +97,9 @@ export function lintGlossary(
       issues.push({
         severity: "warning",
         code: "duplicate-alias",
-        message: `Alias "${group[0]?.term ?? ""}" belongs to multiple entries: ${entryIds.join(", ")}.`,
+        message: group.some(({ locale }) => locale !== undefined)
+          ? `${group.map(describe).join(", ")} belong to different entries (${entryIds.join(", ")}). Translations are matched as aliases unless includeTranslations is false.`
+          : `Alias "${group[0]?.term ?? ""}" belongs to multiple entries: ${entryIds.join(", ")}.`,
         entryIds,
         terms: [...new Set(group.map(({ term }) => term))],
       });
@@ -95,7 +123,7 @@ export function lintGlossary(
       issues.push({
         severity: "warning",
         code: "nested-alias",
-        message: `Alias "${shorter.term}" is contained in "${longer.term}" from another entry. Runtime matching will prefer the longer occurrence.`,
+        message: `${describe(shorter)} is contained in ${containerLabel(longer)} from another entry. Runtime matching will prefer the longer occurrence.`,
         entryIds: [shorter.entry.id, longer.entry.id],
         terms: [shorter.term, longer.term],
       });
