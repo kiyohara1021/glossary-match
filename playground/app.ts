@@ -129,7 +129,7 @@ function renderResults(glossary: Glossary, result: GlossaryMatchResult): void {
   const conflictList = element<HTMLDivElement>("conflict-list");
   conflictList.replaceChildren();
   conflictSection.hidden = result.conflicts.length === 0;
-  for (const conflict of result.conflicts) conflictList.append(createCard(result.normalizedText.slice(conflict.start, conflict.end), conflict.occurrences.map(({ entryId }) => entryId).join(" ↔ ")));
+  for (const conflict of result.conflicts) conflictList.append(createCard(result.normalizedText.slice(conflict.start, conflict.end), conflict.occurrences.map(({ entryId }) => entryId).join(" ↔ "), conflict.kind === "overlap" ? "overlap" : undefined));
 
   const lintIssues = lintGlossary(glossary);
   const lintSection = element<HTMLElement>("lint-section");
