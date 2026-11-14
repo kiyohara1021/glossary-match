@@ -4,6 +4,10 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+### Fixed
+
+- `lintGlossary` now checks translation labels for `duplicate-alias` and `nested-alias`, because matching treats them as aliases unless `includeTranslations` is false ([#15](https://github.com/kiyohara1021/glossary-match/issues/15)).
+
 ## [0.2.0] - 2026-11-14
 
 ### Removed
