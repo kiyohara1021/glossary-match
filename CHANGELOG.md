@@ -4,9 +4,14 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+### Added
+
+- `MatchConflict.kind` distinguishes `same-span` from `overlap`. Partly overlapping occurrences from different entries (for example `AB` and `BC` in `ABC`) are now reported in `conflicts` instead of being silently kept ([#16](https://github.com/kiyohara1021/glossary-match/issues/16)).
+
 ### Fixed
 
 - `lintGlossary` now checks translation labels for `duplicate-alias` and `nested-alias`, because matching treats them as aliases unless `includeTranslations` is false ([#15](https://github.com/kiyohara1021/glossary-match/issues/15)).
+- The CLI reads option values by position, so `--text "-h"` is matched as text rather than showing help, and `--flag=value` is accepted ([#17](https://github.com/kiyohara1021/glossary-match/issues/17)).
 
 ## [0.2.0] - 2026-11-14
 
