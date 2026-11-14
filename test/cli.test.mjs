@@ -140,4 +140,3 @@ test("labels overlap conflicts in the text output", async () => {
   assert.equal(result.exitCode, 0);
   assert.match(result.stdout, /Conflict \(overlap\): \[0, 5\) matches dragon-hunt, battle/);
 });
-});
