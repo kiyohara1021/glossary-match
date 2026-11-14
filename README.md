@@ -88,7 +88,7 @@ Terms:
 Suppressed: 黒龍 (contained by 黒龍討伐戦)
 ```
 
-Use `--json` for structured matches, suppressions, conflicts, and normalized offsets.
+Use `--json` for structured matches, suppressions, conflicts, and normalized offsets. Options also accept `--name=value`; use `--text=--example` when the text itself starts with `--`.
 
 Lint the same glossary with:
 
