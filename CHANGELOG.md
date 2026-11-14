@@ -4,9 +4,7 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
-## [0.2.0]
-
-Not yet published to npm. Set the date here when the `v0.2.0` release is created.
+## [0.2.0] - 2026-11-14
 
 ### Removed
 
