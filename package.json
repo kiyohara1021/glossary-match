@@ -1,6 +1,6 @@
 {
   "name": "glossary-match",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Deterministic, CJK-friendly glossary matching for translation and LLM prompts.",
   "type": "module",
   "license": "MIT",

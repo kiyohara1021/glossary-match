@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-25
+
 ### Added
 
 - `MatchConflict.kind` distinguishes `same-span` from `overlap`. Partly overlapping occurrences from different entries (for example `AB` and `BC` in `ABC`) are now reported in `conflicts` instead of being silently kept ([#16](https://github.com/kiyohara1021/glossary-match/issues/16)).
@@ -36,6 +38,7 @@ All notable changes to this project are documented in this file. The format foll
 - Glossary linting for duplicate IDs, duplicate aliases, and nested aliases.
 - Prompt formatting for a target locale, and the `glossary-match` CLI.
 
-[Unreleased]: https://github.com/kiyohara1021/glossary-match/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/kiyohara1021/glossary-match/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/kiyohara1021/glossary-match/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/kiyohara1021/glossary-match/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/kiyohara1021/glossary-match/releases/tag/v0.1.0
